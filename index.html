@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An interactive D3 exploration of CMIP6 global temperature projections through 2100.">
+  <title>Five Futures for a Warming World</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <nav class="nav wrap" aria-label="Page navigation">
+      <a class="brand" href="#top">CMIP6 / 2100</a>
+      <div class="nav-links">
+        <a href="#explorer">Explorer</a>
+        <a href="#method">Method</a>
+        <a href="#writeup">Write-up</a>
+      </div>
+    </nav>
+    <div class="hero-inner wrap" id="top">
+      <p class="eyebrow">An interactive climate futures atlas</p>
+      <h1>Five futures.<br><em>One warming world.</em></h1>
+      <p class="dek">Climate models do not predict a single future. They show a range of possible worlds—and how sharply those worlds diverge when emissions choices compound over time.</p>
+      <a class="scroll-cue" href="#explorer">Explore the pathways <span aria-hidden="true">↓</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro wrap" aria-labelledby="question-title">
+      <p class="section-number">01 / The question</p>
+      <div>
+        <h2 id="question-title">When do emissions choices begin to meaningfully separate our climate futures?</h2>
+        <p>Each line below summarizes dozens of global climate models. The line is the median model; its translucent envelope spans the 10th to 90th percentile. Select scenarios and move through decades to see both the shared near-term warming and the growing long-term uncertainty.</p>
+      </div>
+    </section>
+
+    <section class="explorer-shell" id="explorer" aria-labelledby="explorer-title">
+      <div class="wrap">
+        <div class="chart-heading">
+          <div>
+            <p class="section-number light">02 / Interactive explorer</p>
+            <h2 id="explorer-title">Global surface temperature anomaly</h2>
+            <p class="chart-subtitle">Decadal global mean relative to the 1850–1900 average · °C</p>
+          </div>
+          <button id="reset-btn" class="reset-btn" type="button">Reset view</button>
+        </div>
+
+        <div class="controls" aria-label="Visualization controls">
+          <fieldset id="scenario-controls">
+            <legend>Compare pathways</legend>
+          </fieldset>
+          <label class="ribbon-control">
+            <input id="ribbon-toggle" type="checkbox" checked>
+            <span>Show model range</span>
+          </label>
+        </div>
+
+        <div class="viz-card">
+          <div id="main-chart" class="chart" role="img" aria-label="Interactive line chart of projected global warming under five emissions scenarios"></div>
+          <div class="threshold-key" aria-hidden="true"><span></span> Paris Agreement reference</div>
+        </div>
+
+        <div class="time-control">
+          <div class="time-labels">
+            <label for="period-slider">Focus decade</label>
+            <output id="period-output" for="period-slider">2091–2100</output>
+          </div>
+          <input id="period-slider" type="range" min="0" max="8" step="1" value="8">
+          <div class="range-ends"><span>2011–20</span><span>2091–2100</span></div>
+        </div>
+
+        <div class="detail-grid">
+          <article class="insight-card">
+            <p class="card-label">What the models show</p>
+            <p id="insight-copy" class="insight-copy" aria-live="polite"></p>
+          </article>
+          <article class="distribution-card">
+            <div class="distribution-heading">
+              <div>
+                <p class="card-label">Inside the ensemble</p>
+                <h3 id="distribution-title">Models in 2091–2100</h3>
+              </div>
+              <p class="dot-note">Each dot is one climate model</p>
+            </div>
+            <div id="distribution-chart" class="distribution" role="img" aria-label="Dot plot of individual climate-model temperature projections"></div>
+          </article>
+        </div>
+
+        <div id="stat-cards" class="stat-cards" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="findings wrap" aria-labelledby="findings-title">
+      <p class="section-number">03 / Reading the chart</p>
+      <div>
+        <h2 id="findings-title">The near future is shared.<br>The late century is chosen.</h2>
+        <div class="finding-grid">
+          <article>
+            <span class="finding-index">A</span>
+            <h3>Near-term inertia</h3>
+            <p>Through the 2030s, the scenario medians remain close. Past emissions and the climate system’s delayed response make some additional warming common to every pathway.</p>
+          </article>
+          <article>
+            <span class="finding-index">B</span>
+            <h3>A widening fork</h3>
+            <p>After mid-century, pathways separate rapidly. Under SSP1-1.9 the ensemble median levels off; under SSP5-8.5 it continues climbing.</p>
+          </article>
+          <article>
+            <span class="finding-index">C</span>
+            <h3>Uncertainty is not ignorance</h3>
+            <p>Models disagree on the exact amount of warming, but by late century the differences between scenarios are larger than much of the within-scenario model spread.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="method" id="method" aria-labelledby="method-title">
+      <div class="wrap method-grid">
+        <div>
+          <p class="section-number light">04 / Method & data</p>
+          <h2 id="method-title">From 44 models to a legible range</h2>
+        </div>
+        <div class="method-copy">
+          <p>The source archive contains global-mean near-surface air temperature (<code>tas</code>) anomalies from CMIP6 models. Values are area-weighted, aggregated to annual means, referenced to 1850–1900, and then averaged into multi-year periods by the archive maintainers.</p>
+          <p>This visualization keeps the nine non-overlapping decades from 2011–2020 through 2091–2100. Within every scenario and decade, it computes the median and the 10th/90th percentiles across one ensemble member per model. No models or outliers are removed.</p>
+          <dl>
+            <div><dt>Variable</dt><dd>Global mean surface air temperature anomaly</dd></div>
+            <div><dt>Scenarios</dt><dd>SSP1-1.9, SSP1-2.6, SSP2-4.5, SSP3-7.0, SSP5-8.5</dd></div>
+            <div><dt>Unit</dt><dd>°C above 1850–1900 mean</dd></div>
+            <div><dt>Models</dt><dd>14–44 per scenario</dd></div>
+          </dl>
+          <p class="source-note">Source: CMIP6 model output curated by Mathias Hauser, ETH Zürich. <a href="https://doi.org/10.5281/zenodo.5532894" target="_blank" rel="noreferrer">Dataset and citation ↗</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="writeup wrap" id="writeup" aria-labelledby="writeup-title">
+      <p class="section-number">05 / Design write-up</p>
+      <div>
+        <h2 id="writeup-title">Why this design</h2>
+        <div class="writeup-columns">
+          <article>
+            <h3>Visual encodings</h3>
+            <p>Position on a common vertical scale encodes temperature because it supports precise comparison. Scenario hue distinguishes pathways, while line weight and opacity establish focus. A continuous line emphasizes trajectory; the percentile ribbon makes model disagreement visible without obscuring the median. The detail view changes the unit of analysis from an aggregate to individual models, exposing the distribution behind each ribbon.</p>
+          </article>
+          <article>
+            <h3>Interaction rationale</h3>
+            <p>Scenario toggles support direct comparison without forcing all five pathways on every reader. Hovering provides details on demand; the decade slider links the trajectory view to a model-level dot plot. This coordinated interaction answers two related questions: how futures change over time, and how much models agree at a chosen moment.</p>
+          </article>
+          <article>
+            <h3>Alternatives considered</h3>
+            <p>A choropleth was rejected because the available question concerns global scenario divergence rather than local geography. Small multiples reduced overlap but made cross-scenario comparison harder. A single mean line hid uncertainty, while a min–max band overemphasized extreme models; the median with a 10th–90th percentile interval was more robust and legible.</p>
+          </article>
+          <article class="team-process">
+            <h3>Development process</h3>
+            <p>The work proceeded through data inspection, question scoping, paper sketches, implementation, and responsive testing. Data transformation and the coordinated D3 views required the most effort, followed by interaction polish and accessible labeling.</p>
+            <p class="todo-note"><strong>Before submission:</strong> replace this note with team member responsibilities and the actual total person-hours. These facts must come from your team.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <p>DSC 106 · Project 3 · Interactive Visualization</p>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+  <script src="d3.v7.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
