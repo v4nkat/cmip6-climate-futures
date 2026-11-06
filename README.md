@@ -26,6 +26,6 @@ The visualization retains only non-overlapping decadal periods and computes the 
 
 The project is static and ready for GitHub Pages. Upload the files to a public repository and serve from the repository root.
 
-## Before submitting
+## Team process
 
-Replace the highlighted note in the Development process section with truthful team-member responsibilities and actual person-hours. These details cannot be inferred from the code.
+The project was developed by Venkata, Amrith, and Matthew. The public page includes the team's responsibility breakdown and estimated total person-hours.
